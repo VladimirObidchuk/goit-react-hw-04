@@ -1,22 +1,22 @@
-import { useState } from "react";
 import css from "./SearchBar.module.css";
+import { BsSearch } from "react-icons/bs";
 
 const SearchBar = () => {
-  const [inputValue, setInputValue] = useState("");
-  const handleChange = (evt) => {
-    setInputValue(evt.target.value);
-  };
   return (
-    <div className={css.search}>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={handleChange}
-        className={css}
-      />
-      <p className={css}>{inputValue}</p>
-    </div>
+    <header className={css.header}>
+      <form className={css.form}>
+        <button type="submit" className={css.btn}>
+          <BsSearch />
+        </button>
+        <input
+          type="text"
+          className={css.input}
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
   );
 };
-
 export default SearchBar;
