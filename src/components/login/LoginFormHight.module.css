@@ -1,0 +1,17 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+  align-items: center;
+}
+.input {
+  font-size: 25px;
+  font-weight: 600;
+  width: 100%;
+}
+.btn {
+  font-size: 25px;
+  font-weight: 500;
+  width: 40%;
+}
