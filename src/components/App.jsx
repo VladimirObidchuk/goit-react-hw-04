@@ -1,13 +1,16 @@
 import "modern-normalize";
 import "./App.css";
-// import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Modal from "react-modal";
 import { GridLoader } from "react-spinners";
+
 import apiInstans from "../api/api";
 import ImageGallery from "./gallery/ImageGallery";
 import SearchBar from "./searchbar/SearchBar";
 import ModalImagePreview from "./modalimage/ImagePreview";
 import ErrorMessage from "./errormessage/ErrorMessage";
+
+Modal.setAppElement("#root");
 
 export default function App() {
   const [collection, setCollction] = useState([]);
@@ -19,7 +22,9 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [modalImage, setModalImage] = useState("");
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const loadMoImageRef = useRef(null);
 
   useEffect(() => {
     if (searchValue.trim() === "") return;
@@ -78,17 +83,29 @@ export default function App() {
     fetchMore();
   }, [page]);
 
+  const handleImageClick = (image) => {
+    setModalImage(image);
+    setIsOpen(true);
+  };
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-    setOpen(true);
+
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "auto"; // про всяк випадок очищення
     };
-  }, [modalImage]);
+  }, [isOpen]);
+  useEffect(() => {
+    if (page > 1 && loadMoImageRef.current) {
+      loadMoImageRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [collection]);
 
   return (
     <div className="main">
@@ -99,34 +116,27 @@ export default function App() {
       />
       {loading && <GridLoader />}
       {collection.length > 0 ? (
-        <ImageGallery photos={collection || []} onClick={setModalImage} />
-      ) : (
+        <ImageGallery
+          photos={collection}
+          onClick={handleImageClick}
+          loadMoImageRef={loadMoImageRef}
+        />
+      ) : !loading && searchValue.trim() !== "" && !error ? (
         <ErrorMessage message="No results" />
-      )}
+      ) : null}
+
       {!loading && hasMore && collection.length > 0 && (
         <button onClick={() => setPage((prev) => prev + 1)}>Load more</button>
       )}
       {error && <ErrorMessage message={errorMessage} />}
-      {open && (
-        <ModalImagePreview
-          image={modalImage}
-          onClose={() => {
-            setOpen(false);
-            setModalImage("");
-          }}
-        />
-      )}
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={() => setIsOpen(false)}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        {modalImage && <ModalImagePreview image={modalImage} />}
+      </Modal>
     </div>
   );
 }
-
-{
-  /* <Toaster reverseOrder={false} />; */
-}
-
-//  const notify = () =>
-//    toast("Here is your toast.", {
-//      duration: 4000,
-//      position: "bottom-right",
-//      removeDelay: 1000,
-//    });

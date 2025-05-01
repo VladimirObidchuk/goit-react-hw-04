@@ -1,20 +1,20 @@
 import ImageCard from "../imagecard/ImageCard";
 import css from "./ImageGallery.module.css";
 
-const ImageGallery = ({ photos, onClick }) => {
+const ImageGallery = ({ photos, onClick, loadMoImageRef }) => {
   return (
     <div className={css.gallery}>
       <ul className={css.list}>
-        {photos.map((photo) => {
+        {photos.map((photo, index) => {
+          const isLast = index === photos.length - 1;
           return (
-            <li
-              className={css.item}
-              key={photo.id}
-              onClick={() => {
-                onClick(photo);
-              }}
-            >
-              <ImageCard photo={photo} />
+            <li className={css.item} key={photo.id}>
+              <ImageCard
+                photo={photo}
+                isLast={isLast}
+                loadMoImageRef={loadMoImageRef}
+                onClick={onClick}
+              />
             </li>
           );
         })}

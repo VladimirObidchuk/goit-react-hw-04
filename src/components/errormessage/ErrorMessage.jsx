@@ -5,8 +5,8 @@ const ErrorMessage = ({ message }) => {
     <div className={css.message}>
       <h3 className={css.title}>{message}</h3>
       <p className={css.text}>
-        When entering words, please put spaces between them and use English as
-        the query language.
+        When entering words, please put spaces between them and use the layout
+        with the input language.
       </p>
     </div>
   );
