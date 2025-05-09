@@ -1,10 +1,18 @@
 import axios from "axios";
 
-const apiKey = import.meta.env.VITE_API_KEY;
-const apiInstans = axios.create({
-  baseURL: `https://api.unsplash.com`,
-  headers: {
-    Authorization: `Client-ID ${apiKey}`,
-  },
-});
-export default apiInstans;
+axios.defaults.baseURL = `https://api.unsplash.com`;
+
+export const fetchData = async (searchValue, currentPage) => {
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const apiInstans = axios.get("/search/photos", {
+    params: {
+      query: searchValue,
+      page: currentPage,
+      per_page: 12,
+    },
+    headers: {
+      Authorization: `Client-ID ${apiKey}`,
+    },
+  });
+  return apiInstans;
+};

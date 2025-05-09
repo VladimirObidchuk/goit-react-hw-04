@@ -1,15 +1,33 @@
-import css from "./ImagePreview.module.css";
+import Modal from "react-modal";
 
-const ModalImagePreview = ({ image }) => {
+Modal.setAppElement("#root");
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
+const ModalImagePreview = ({ modalIsOpen, closeModal, src, alt }) => {
+  console.log(" src", src.full);
   return (
-    <div className={css.modalBlock} onClick={(e) => e.stopPropagation()}>
+    <Modal
+      style={customStyles}
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      overlayClassName="overlay"
+    >
       <img
-        src={`${image.urls.raw}&w=400&h=300&fit=clamp&fm=webp`}
-        srcSet={`${image.urls.raw}&w=400&h=300&fit=clamp&fm=webp 1x, ${image.urls.raw}&w=400&h=300&dpr=2&fit=clamp&fm=webp 2x`}
-        alt={image.description}
-        className={css.img}
+        src={`${src.raw}&w=800&h=600&fm=webp`}
+        srcSet={`${src.raw}&w=800&h=600&fm=webp 1x, ${src.raw}&w=800&h=600&dpr=2&fm=webp 2x`}
+        alt={alt}
       />
-    </div>
+    </Modal>
   );
 };
 export default ModalImagePreview;
