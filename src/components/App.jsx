@@ -1,6 +1,6 @@
 import "modern-normalize";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { GridLoader } from "react-spinners";
 
@@ -22,6 +22,8 @@ export default function App() {
   const [modalSrc, setModalSrc] = useState("");
   const [modalAlt, setModalAlt] = useState("");
 
+  const bottomRef = useRef(null);
+
   const handleSearch = (newImage) => {
     setSearchValue(newImage);
     setCurrentPage(1);
@@ -41,6 +43,11 @@ export default function App() {
     setModalSrc("");
     setModalAlt("");
   }
+  useEffect(() => {
+    if (bottomRef.current && currentPage > 1) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [collection]);
 
   useEffect(() => {
     if (searchValue === "") return;
@@ -66,13 +73,21 @@ export default function App() {
 
   const hasCollection = collection.length > 0;
   const isLastPage = currentPage === totalPages;
+  const valueSearch = searchValue.trim() !== "";
+
   return (
     <div className="main">
       <SearchBar onSubmit={handleSearch} />
       {loading && <GridLoader />}
-      {collection.length > 0 ? (
-        <ImageGallery photos={collection} openModal={openModal} />
-      ) : !loading && searchValue.trim() !== "" && !isError ? (
+      {hasCollection ? (
+        <>
+          <ImageGallery
+            photos={collection}
+            openModal={openModal}
+            bottomRef={bottomRef}
+          />
+        </>
+      ) : !loading && valueSearch && !isError ? (
         <ErrorMessage message="No results" />
       ) : null}
       {isError && <ErrorMessage message={errorMessage} />}
