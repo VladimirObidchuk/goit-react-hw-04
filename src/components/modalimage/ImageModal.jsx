@@ -13,7 +13,7 @@ const customStyles = {
   },
 };
 
-const ModalImagePreview = ({ modalIsOpen, closeModal, src, alt }) => {
+const ImageModal = ({ modalIsOpen, closeModal, src, alt }) => {
   console.log(" src", src.full);
   return (
     <Modal
@@ -30,4 +30,4 @@ const ModalImagePreview = ({ modalIsOpen, closeModal, src, alt }) => {
     </Modal>
   );
 };
-export default ModalImagePreview;
+export default ImageModal;

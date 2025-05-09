@@ -7,8 +7,9 @@ import { GridLoader } from "react-spinners";
 import { fetchData } from "../api/api";
 import ImageGallery from "./gallery/ImageGallery";
 import SearchBar from "./searchbar/SearchBar";
-import ModalImagePreview from "./modalimage/ImagePreview";
+import ImageModal from "./modalimage/ImageModal";
 import ErrorMessage from "./errormessage/ErrorMessage";
+import LoadMoBtn from "./loadmobtn/LoadMoBtn";
 
 export default function App() {
   const [collection, setCollction] = useState([]);
@@ -92,9 +93,9 @@ export default function App() {
       ) : null}
       {isError && <ErrorMessage message={errorMessage} />}
       {!loading && !isLastPage && hasCollection && (
-        <button onClick={incPage}>Load more</button>
+        <LoadMoBtn incPage={incPage} />
       )}
-      <ModalImagePreview
+      <ImageModal
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
         src={modalSrc}
